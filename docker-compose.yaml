@@ -1,0 +1,14 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: amazon_balance_calculation
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/sql:/docker-entrypoint-initdb.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    ports:
+      - 3308:3306
+    container_name: amazon_balance_calculation

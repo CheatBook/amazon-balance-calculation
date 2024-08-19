@@ -2,12 +2,15 @@ package com.cheatbook.amazon_balance_calculation.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cheatbook.amazon_balance_calculation.model.SettlementInfoSummary;
 import com.cheatbook.amazon_balance_calculation.service.MonthlySettlementSummaryService;
 import com.cheatbook.amazon_balance_calculation.service.SettlementInfoService;
-import com.cheatbook.amazon_balance_calculation.service.SettlementInfoTsvData;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -17,13 +20,19 @@ public class SettlementInfoController {
   private final SettlementInfoService settlementInfoService;
   private final MonthlySettlementSummaryService monthlySettlementSummaryService;
 
-  @GetMapping("settlementinfo")
-  public List<SettlementInfoTsvData> importTsvSettlementInfoData() {
-    return settlementInfoService.readSettlementInfoDataTsv("C:/Users/user/Downloads/59137019949.txt");
+  @PostMapping("settlementinfo")
+  public ResponseEntity<?> importSettlementInfoData(@RequestBody String filePath) {
+    try {
+      settlementInfoService.readSettlementInfoDataTsv(filePath);
+      return ResponseEntity.ok("成功"); // 成功時のレスポンス
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                           .body("Error processing file: " + e.getMessage()); // 失敗時のレスポンス
+    }
   }
 
-  @GetMapping("settlementinfoData")
+  @GetMapping("settlementinfo")
   public List<SettlementInfoSummary> getTsvSettlementInfoData() {
-    return monthlySettlementSummaryService.getMonthlySettlementSummary(LocalDate.of(2024, 7, 1), LocalDate.of(2024, 8, 1));
+    return monthlySettlementSummaryService.getMonthlySettlementSummary(LocalDate.of(2024, 6, 1), LocalDate.of(2024, 7, 1));
   }
 }

@@ -26,7 +26,7 @@ public class SettlementInfoService {
   @Autowired
   private SettlementInfoDetailRepository settlementInfoDetailRepository;
 
-  public List<SettlementInfoTsvData> readSettlementInfoDataTsv(String filePath) {
+  public void readSettlementInfoDataTsv(String filePath) {
 
     // ObjectMapper を作成し、JavaTimeModule を登録
     CsvMapper mapper = new CsvMapper();
@@ -76,7 +76,6 @@ public class SettlementInfoService {
       saveDataToDatabase(dataList);
     }
 
-    return dataList;
   }
 
   @Transactional
@@ -97,9 +96,9 @@ public class SettlementInfoService {
         detailId.setSettlementId(data.getSettlementId());
         detailId.setOrderId(data.getOrderId());
         detailId.setAmountDescription(data.getAmountDescription());
+        detailId.setTransactionType(data.getTransactionType());
         detail.setId(detailId);
 
-        detail.setTransactionType(data.getTransactionType());
         detail.setMerchantOrderId(data.getMerchantOrderId());
         detail.setAdjustmentId(data.getAdjustmentId());
         detail.setShipmentId(data.getShipmentId());

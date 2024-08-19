@@ -17,8 +17,8 @@ CREATE TABLE settlement_info (
 
 CREATE TABLE settlement_info_detail (
     settlement_id VARCHAR(255),
-    order_id VARCHAR(255),
-    amount_description VARCHAR(255),
+    order_id VARCHAR(100),
+    amount_description VARCHAR(100),
     transaction_type VARCHAR(50),
     merchant_order_id VARCHAR(255),
     adjustment_id VARCHAR(255),
@@ -35,6 +35,13 @@ CREATE TABLE settlement_info_detail (
     sku VARCHAR(255),
     quantity_purchased INT,
     promotion_id VARCHAR(255),
-    PRIMARY KEY (settlement_id, order_id, amount_description),
+    PRIMARY KEY (settlement_id, order_id, amount_description, transaction_type),
     FOREIGN KEY (settlement_id) REFERENCES settlement_info(settlement_id)
 ) ENGINE=InnoDB;
+    
+CREATE TABLE Adexpenses (
+    target_date DATE NOT NULL,
+    sku VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (target_date, sku)
+);

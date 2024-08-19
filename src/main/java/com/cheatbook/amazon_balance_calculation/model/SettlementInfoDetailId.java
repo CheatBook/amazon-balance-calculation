@@ -22,4 +22,7 @@ public class SettlementInfoDetailId implements Serializable {
 
   @Column(name = "amount_description")
   private String amountDescription;
+
+  @Column(name = "transaction_type")
+  private String transactionType;
 }

@@ -16,9 +16,6 @@ public class SettlementInfoDetail {
   @EmbeddedId
   private SettlementInfoDetailId id;
 
-  @Column(name = "transaction_type")
-  private String transactionType;
-
   @Column(name = "merchant_order_id")
   private String merchantOrderId;
 

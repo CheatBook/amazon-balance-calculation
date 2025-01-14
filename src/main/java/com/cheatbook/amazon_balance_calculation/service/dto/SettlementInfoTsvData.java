@@ -1,4 +1,4 @@
-package com.cheatbook.amazon_balance_calculation.service;
+package com.cheatbook.amazon_balance_calculation.service.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

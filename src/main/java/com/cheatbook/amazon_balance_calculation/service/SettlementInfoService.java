@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,11 +12,15 @@ import com.cheatbook.amazon_balance_calculation.model.SettlementInfo;
 import com.cheatbook.amazon_balance_calculation.model.SettlementInfoDetail;
 import com.cheatbook.amazon_balance_calculation.repository.SettlementInfoDetailRepository;
 import com.cheatbook.amazon_balance_calculation.repository.SettlementInfoRepository;
+import com.cheatbook.amazon_balance_calculation.service.dto.SettlementInfoTsvData;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 
+/**
+ * 決済情報登録Service
+ */
 @Service
 public class SettlementInfoService {
 
@@ -81,40 +86,14 @@ public class SettlementInfoService {
 
   @Transactional
   public void saveDataToDatabase(List<SettlementInfoTsvData> dataList) {
+    ModelMapper modelMapper = new ModelMapper();
     for (SettlementInfoTsvData data : dataList) {
       if (Objects.nonNull(data.getSettlementStartDate())) {
-        SettlementInfo settlementInfo = new SettlementInfo();
-        settlementInfo.setSettlementId(data.getSettlementId());
-        settlementInfo.setSettlementStartDate(data.getSettlementStartDate());
-        settlementInfo.setSettlementEndDate(data.getSettlementEndDate());
-        settlementInfo.setDepositDate(data.getDepositDate());
-        settlementInfo.setTotalAmount(data.getTotalAmount());
-        settlementInfo.setCurrency(data.getCurrency());
-        settlementInfoRepository.save(settlementInfo);
+        // 決済のヘッダー情報の登録
+        settlementInfoRepository.save(modelMapper.map(data, SettlementInfo.class));
       } else {
-        SettlementInfoDetail detail = new SettlementInfoDetail();
-        detail.setSettlementId(data.getSettlementId());
-        detail.setOrderId(data.getOrderId());
-        detail.setAmountDescription(data.getAmountDescription());
-        detail.setTransactionType(data.getTransactionType());
-        detail.setAmountType(data.getAmountType());
-
-        detail.setMerchantOrderId(data.getMerchantOrderId());
-        detail.setAdjustmentId(data.getAdjustmentId());
-        detail.setShipmentId(data.getShipmentId());
-        detail.setMarketplaceName(data.getMarketplaceName());
-        detail.setAmount(data.getAmount());
-        detail.setFulfillmentId(data.getFulfillmentId());
-        detail.setPostedDate(data.getPostedDate());
-        detail.setPostedDateTime(data.getPostedDateTime());
-        detail.setOrderItemCode(data.getOrderItemCode());
-        detail.setMerchantOrderItemId(data.getMerchantOrderItemId());
-        detail.setMerchantAdjustmentItemId(data.getMerchantAdjustmentItemId());
-        detail.setSku(data.getSku());
-        detail.setQuantityPurchased(data.getQuantityPurchased());
-        detail.setPromotionId(data.getPromotionId());
-
-        settlementInfoDetailRepository.save(detail);
+        // 決済の詳細情報の登録
+        settlementInfoDetailRepository.save(modelMapper.map(data, SettlementInfoDetail.class));
       }
     }
   }

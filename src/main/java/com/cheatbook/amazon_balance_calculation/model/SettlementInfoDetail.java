@@ -17,7 +17,8 @@ public class SettlementInfoDetail {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "id")
+  private Long sequenceId;
 
   @Column(name = "settlement_id")
   private String settlementId;

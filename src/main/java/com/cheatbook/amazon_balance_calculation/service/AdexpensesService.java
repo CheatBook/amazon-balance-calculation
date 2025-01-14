@@ -1,7 +1,7 @@
 package com.cheatbook.amazon_balance_calculation.service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import com.cheatbook.amazon_balance_calculation.model.Adexpenses;
 import com.cheatbook.amazon_balance_calculation.repository.AdexpensesRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,10 @@ public class AdexpensesService {
 
   private final AdexpensesRepository adexpensesRepository;
 
-  public void saveAdexpensesFromExcel(String excelFilePath, LocalDate tagetDate) {
+  public void saveAdexpensesFromExcel(MultipartFile file, LocalDate tagetDate) {
     Map<String, Adexpenses> adexpensesMap = new HashMap<>();
 
-    try (FileInputStream fis = new FileInputStream(excelFilePath); Workbook workbook = new XSSFWorkbook(fis)) {
+    try (InputStream inputStream = file.getInputStream(); Workbook workbook = new XSSFWorkbook(inputStream)) {
 
       Sheet sheet = workbook.getSheetAt(0);
       boolean firstRow = true;

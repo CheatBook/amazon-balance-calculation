@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import com.cheatbook.amazon_balance_calculation.model.SettlementInfoSummary;
 import com.cheatbook.amazon_balance_calculation.service.MonthlySettlementSummaryService;
 import com.cheatbook.amazon_balance_calculation.service.SettlementInfoService;
@@ -21,9 +22,9 @@ public class SettlementInfoController {
   private final MonthlySettlementSummaryService monthlySettlementSummaryService;
 
   @PostMapping("settlementinfo")
-  public ResponseEntity<?> importSettlementInfoData(@RequestBody String filePath) {
+  public ResponseEntity<?> importSettlementInfoData(@RequestBody MultipartFile file) {
     try {
-      settlementInfoService.readSettlementInfoDataTsv(filePath);
+      settlementInfoService.readSettlementInfoDataTsv(file);
       return ResponseEntity.ok("成功"); // 成功時のレスポンス
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)

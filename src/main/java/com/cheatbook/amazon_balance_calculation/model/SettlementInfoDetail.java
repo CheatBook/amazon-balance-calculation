@@ -3,8 +3,10 @@ package com.cheatbook.amazon_balance_calculation.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -13,8 +15,24 @@ import lombok.Data;
 @Table(name = "settlement_info_detail")
 public class SettlementInfoDetail {
 
-  @EmbeddedId
-  private SettlementInfoDetailId id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  @Column(name = "settlement_id")
+  private String settlementId;
+
+  @Column(name = "order_id")
+  private String orderId;
+
+  @Column(name = "amount_description")
+  private String amountDescription;
+
+  @Column(name = "transaction_type")
+  private String transactionType;
+
+  @Column(name = "amount_type")
+  private String amountType;
 
   @Column(name = "merchant_order_id")
   private String merchantOrderId;
@@ -27,9 +45,6 @@ public class SettlementInfoDetail {
 
   @Column(name = "marketplace_name")
   private String marketplaceName;
-
-  @Column(name = "amount_type")
-  private String amountType;
 
   @Column(name = "amount")
   private double amount;
